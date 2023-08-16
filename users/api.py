@@ -4,6 +4,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework import views
 from rest_framework.response import Response
 
+from users.constants import LOGGED_IN_SUCCESS_MSG
 from users.models import User
 from users.serializer import UserSerializer, LoginSerializer
 
@@ -46,6 +47,12 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class LoginView(views.APIView):
+    """
+    Login api for the user login.
+    post:
+        login user using basic auth.
+        parameters : ['username', 'password']
+    """
     # This view should be accessible also for unauthenticated users.
     permission_classes = (permissions.AllowAny,)
 
@@ -54,4 +61,4 @@ class LoginView(views.APIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         login(request, user)
-        return Response("Logged-in Successfully!!!", status=status.HTTP_202_ACCEPTED)
+        return Response(LOGGED_IN_SUCCESS_MSG, status=status.HTTP_202_ACCEPTED)
